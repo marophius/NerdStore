@@ -1,4 +1,4 @@
-﻿using NerdStore.Core.DomainEvents;
+﻿using NerdStore.Core.Messages.CommonMessages.DomainEvents;
 using System;
 using System.Collections.Generic;
 using System.Linq;

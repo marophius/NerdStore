@@ -2,7 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Core;
+using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
 using NerdStore.Vendas.Application.Commands;
+using NerdStore.Vendas.Application.Queries;
+using NerdStore.Vendas.Application.Queries.DTOs;
 
 namespace NerdStore.WebApp.MVC.Controllers
 {
@@ -112,7 +116,7 @@ namespace NerdStore.WebApp.MVC.Controllers
 
         [HttpPost]
         [Route("iniciar-pedido")]
-        public async Task<IActionResult> IniciarPedido(CarrinhoViewModel carrinhoViewModel)
+        public async Task<IActionResult> IniciarPedido(CarrinhoDTO carrinhoViewModel)
         {
             var carrinho = await _pedidoQueries.ObterCarrinhoCliente(ClienteId);
 

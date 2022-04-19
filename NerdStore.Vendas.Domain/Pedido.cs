@@ -1,5 +1,6 @@
 ﻿using NerdStore.Core.DomainObjects;
 using NerdStore.Vendas.Domain.Enums;
+using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
 using System.Linq;

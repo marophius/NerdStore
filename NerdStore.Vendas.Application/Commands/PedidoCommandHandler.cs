@@ -1,5 +1,8 @@
 ﻿using MediatR;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages;
+using NerdStore.Core.Messages.CommonMessages.Notifications;
+using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Domain;
 using NerdStore.Vendas.Domain.Interfaces;
 using System;
@@ -13,10 +16,15 @@ namespace NerdStore.Vendas.Application.Commands
     public class PedidoCommandHandler : IRequestHandler<AdicionarItemPedidoCommand, bool>
     {
         private readonly IPedidoRepository _repository;
+        private readonly IMediatrHandler _mediator;
 
-        public PedidoCommandHandler(IPedidoRepository repository)
+        public PedidoCommandHandler(
+            IPedidoRepository repository,
+            IMediatrHandler mediator
+            )
         {
             _repository = repository;
+            _mediator = mediator;
         }
 
         public async Task<bool> Handle(AdicionarItemPedidoCommand message, CancellationToken cancellationToken)
@@ -30,7 +38,9 @@ namespace NerdStore.Vendas.Application.Commands
             {
                 pedido = Pedido.PedidoFactory.NovoPedidoRascunho(message.ClienteId);
                 pedido.AdicionarItem(pedidoItem);
+
                 _repository.Adicionar(pedido);
+                pedido.AdicionarEvento(new PedidoRascunhoIniciadoEvent(message.ClienteId, message.ProdutoId));
             }
             else
             {
@@ -45,9 +55,11 @@ namespace NerdStore.Vendas.Application.Commands
                 {
                     _repository.AdicionarItem(pedidoItem);
                 }
+
+                pedido.AdicionarEvento(new PedidoAtualizadoEvent(pedido.ClienteId, pedido.Id, pedido.ValorTotal));
             }
 
-
+            pedido.AdicionarEvento(new PedidoItemPedidoAdicionadoEvent(pedido.ClienteId, pedido.Id, message.ProdutoId, message.ValorUnitario, message.Quantidade, message.Nome));
             return await _repository.UnitOfWork.Commit();
         }
 
@@ -55,9 +67,9 @@ namespace NerdStore.Vendas.Application.Commands
         {
             if (message.EhValido()) return true;
 
-            foreach(message.ValidationResult.Errors)
+            foreach(var error in message.ValidationResult.Errors)
             {
-                
+                _mediator.PublicarNotificacao(new DomainNotification(message.MessageType, error.ErrorMessage));
             }
 
             return false;

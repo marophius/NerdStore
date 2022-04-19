@@ -1,6 +1,7 @@
 ﻿using NerdStore.Catalogo.Domain.Events;
 using NerdStore.Catalogo.Domain.Interfaces;
 using NerdStore.Core;
+using NerdStore.Core.Communication.Mediator;
 using System;
 using System.Collections.Generic;
 using System.Linq;

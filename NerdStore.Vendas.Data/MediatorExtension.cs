@@ -1,4 +1,5 @@
 ﻿using NerdStore.Core;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.DomainObjects;
 using NerdStore.Vendas.Data.Context;
 using System;
