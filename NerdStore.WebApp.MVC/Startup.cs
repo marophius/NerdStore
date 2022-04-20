@@ -35,7 +35,7 @@ namespace NerdStore.WebApp.MVC
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
+            // services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_2);
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile), typeof(DTOToDomainProfile));
             services.AddMediatR(typeof(Startup));
             services.ResolveServices();

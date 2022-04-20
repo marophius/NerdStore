@@ -1,5 +1,7 @@
-﻿using NerdStore.Core.DomainObjects;
+﻿using FluentValidation.Results;
+using NerdStore.Core.DomainObjects;
 using NerdStore.Vendas.Domain.Enums;
+using NerdStore.Vendas.Domain.Validators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +24,12 @@ namespace NerdStore.Vendas.Domain
         public bool Ativo { get; private set; }
         public bool Utilizado { get; private set; }
 
+        // EF Rel.
         public ICollection<Pedido> Pedidos { get; set; }
+
+        internal ValidationResult ValidarSeAplicavel()
+        {
+            return new VoucherAplicavelValidator().Validate(this);
+        }
     }
 }

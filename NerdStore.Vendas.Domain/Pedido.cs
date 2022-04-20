@@ -64,7 +64,7 @@ namespace NerdStore.Vendas.Domain
             decimal desconto = 0;
             var valor = ValorTotal;
 
-            if (Voucher.TipoDescontoVoucher == ETipoDescontoVoucher.Porcentagem)
+            if (Voucher.TipoDescontoVoucher == Enums.ETipoDescontoVoucher.Porcentagem)
             {
                 if (Voucher.Percentual.HasValue)
                 {
