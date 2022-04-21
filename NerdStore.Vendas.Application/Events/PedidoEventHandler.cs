@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.IntegrationsEvents;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,12 @@ namespace NerdStore.Vendas.Application.Events
         INotificationHandler<PagamentoRealizadoEvent>,
         INotificationHandler<PagamentoRecusadoEvent>
     {
+        private readonly IMediatrHandler _mediatorHandler;
+
+        public PedidoEventHandler(IMediatrHandler mediatorHandler)
+        {
+            _mediatorHandler = mediatorHandler;
+        }
         public Task Handle(PedidoRascunhoIniciadoEvent notification, CancellationToken cancellationToken)
         {
             return Task.CompletedTask;
