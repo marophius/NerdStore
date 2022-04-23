@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using EventSourcing;
+using MediatR;
 using NerdStore.Catalogo.Application.Services;
 using NerdStore.Catalogo.Data.Context;
 using NerdStore.Catalogo.Data.Repositories;
@@ -7,8 +8,17 @@ using NerdStore.Catalogo.Domain.Interfaces;
 using NerdStore.Catalogo.Domain.Services;
 using NerdStore.Core;
 using NerdStore.Core.Communication.Mediator;
+using NerdStore.Core.Data.EventSourcing;
 using NerdStore.Core.Messages.CommonMessages.IntegrationsEvents;
 using NerdStore.Core.Messages.CommonMessages.Notifications;
+using NerdStore.Pagamentos.AntiCorruption;
+using NerdStore.Pagamentos.AntiCorruption.ConfigManager;
+using NerdStore.Pagamentos.AntiCorruption.PayPal;
+using NerdStore.Pagamentos.Business.Events;
+using NerdStore.Pagamentos.Business.Interfaces;
+using NerdStore.Pagamentos.Business.Services;
+using NerdStore.Pagamentos.Data.Context;
+using NerdStore.Pagamentos.Data.Repository;
 using NerdStore.Vendas.Application.Commands;
 using NerdStore.Vendas.Application.Events;
 using NerdStore.Vendas.Application.Queries;
@@ -57,6 +67,19 @@ namespace NerdStore.WebApp.MVC.Setup
             services.AddScoped<INotificationHandler<PagamentoRealizadoEvent>, PedidoEventHandler>();
             services.AddScoped<INotificationHandler<PagamentoRecusadoEvent>, PedidoEventHandler>();
 
+            // Pagamento
+            services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+            services.AddScoped<IPagamentoService, PagamentoService>();
+            services.AddScoped<IPagamentoCartaoCreditoFacade, PagamentoCartaoCreditoFacade>();
+            services.AddScoped<IPayPalGateway, PayPalGateway>();
+            services.AddScoped<IConfigurationManager, Pagamentos.AntiCorruption.ConfigManager.ConfigurationManager>();
+            services.AddScoped<PagamentoContext>();
+
+            services.AddScoped<INotificationHandler<PedidoEstoqueConfirmadoEvent>, PagamentoEventHandler>();
+
+            // EventStore
+            services.AddSingleton<IEventStoreService, EventStoreService>();
+            services.AddScoped<IEventSourcingRepository, EventSourcingRepository>();
 
         }
     }

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using NerdStore.Core.Communication.Mediator;
 using NerdStore.Core.Messages.CommonMessages.IntegrationsEvents;
+using NerdStore.Vendas.Application.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,17 +41,17 @@ namespace NerdStore.Vendas.Application.Events
 
         public Task Handle(PedidoEstoqueRejeitadoEvent notification, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
-        public Task Handle(PagamentoRealizadoEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(PagamentoRealizadoEvent notification, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+           await _mediatorHandler.EnviarComando(new FinalizarPedidoCommand(notification.PedidoId, notification.ClienteId));
         }
 
-        public Task Handle(PagamentoRecusadoEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(PagamentoRecusadoEvent notification, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            await _mediatorHandler.EnviarComando(new CancelarProcessamentoPedidoEstornarEstoqueCommand(notification.PedidoId, notification.ClienteId));
         }
     }
 }

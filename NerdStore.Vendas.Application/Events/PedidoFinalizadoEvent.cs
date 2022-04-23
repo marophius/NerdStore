@@ -13,7 +13,6 @@ namespace NerdStore.Vendas.Application.Events
         {
             AggregateId = pedidoId;
             PedidoId = pedidoId;
-            AggregateId = pedidoId;
         }
 
         public Guid PedidoId { get; private set; }
